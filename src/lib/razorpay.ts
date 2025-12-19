@@ -6,11 +6,18 @@
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
+// Lazy initialize Razorpay instance to avoid build-time errors
+let razorpayInstance: Razorpay | null = null;
+
+function getRazorpayInstance(): Razorpay {
+  if (!razorpayInstance) {
+    razorpayInstance = new Razorpay({
+      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
+      key_secret: process.env.RAZORPAY_KEY_SECRET || '',
+    });
+  }
+  return razorpayInstance;
+}
 
 interface RazorpayOrder {
   id: string;
@@ -78,6 +85,7 @@ export async function createRazorpayOrder(
       },
     };
 
+    const razorpay = getRazorpayInstance();
     const order = await razorpay.orders.create(options);
     return order as RazorpayOrder;
   } catch (error) {
@@ -134,6 +142,7 @@ export function verifyRazorpayWebhook(
  */
 export async function getRazorpayPayment(paymentId: string): Promise<any> {
   try {
+    const razorpay = getRazorpayInstance();
     const payment = await razorpay.payments.fetch(paymentId);
     return payment;
   } catch (error) {
@@ -147,6 +156,7 @@ export async function getRazorpayPayment(paymentId: string): Promise<any> {
  */
 export async function getRazorpayOrder(orderId: string): Promise<any> {
   try {
+    const razorpay = getRazorpayInstance();
     const order = await razorpay.orders.fetch(orderId);
     return order;
   } catch (error) {
@@ -163,6 +173,7 @@ export async function createRazorpayRefund(
   amount?: number
 ): Promise<any> {
   try {
+    const razorpay = getRazorpayInstance();
     const refund = await razorpay.payments.refund(paymentId, {
       amount: amount, // Amount in paise, if not provided refunds full amount
       speed: 'normal',
