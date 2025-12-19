@@ -75,10 +75,18 @@ export async function POST(
   try {
     const { id: snippetId } = await params;
 
-    // Increment usage count
+    // Increment usage count - first get current count
+    const { data: currentSnippet } = await supabase
+      .from('snippets')
+      .select('usage_count')
+      .eq('id', snippetId)
+      .single();
+
+    const newCount = (currentSnippet?.usage_count || 0) + 1;
+
     const { error } = await supabase
       .from('snippets')
-      .update({ usage_count: supabase.raw('usage_count + 1') })
+      .update({ usage_count: newCount })
       .eq('id', snippetId);
 
     if (error) {
