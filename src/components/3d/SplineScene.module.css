@@ -1,0 +1,149 @@
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #4A5F47;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(163, 177, 138, 0.2);
+  border-top-color: #588157;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.fallback3D {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  perspective: 1200px;
+}
+
+.codeBlock {
+  width: 500px;
+  max-width: 90%;
+  background: linear-gradient(135deg, rgba(250, 249, 246, 0.95), rgba(237, 233, 224, 0.95));
+  border-radius: 16px;
+  box-shadow:
+    0 20px 60px rgba(88, 129, 87, 0.15),
+    0 0 1px rgba(163, 177, 138, 0.3);
+  border: 1px solid rgba(163, 177, 138, 0.2);
+  overflow: hidden;
+  animation: float 6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.blockHeader {
+  background: linear-gradient(135deg, #EDE9E0, #E5DFD4);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(163, 177, 138, 0.15);
+}
+
+.dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fileName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4A5F47;
+  font-family: 'Space Grotesk', monospace;
+}
+
+.blockContent {
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, #FAF9F6, #F5F3EF);
+}
+
+.code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 1rem;
+  line-height: 1.8;
+  display: block;
+}
+
+/* Floating particles */
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #A3B18A, #588157);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(163, 177, 138, 0.6);
+  animation: particleFloat 8s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotateX(5deg) rotateY(-5deg);
+  }
+  50% {
+    transform: translateY(-20px) rotateX(-5deg) rotateY(5deg);
+  }
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(15px, -15px);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-10px, -25px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(-20px, 10px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .codeBlock {
+    width: 100%;
+  }
+
+  .code {
+    font-size: 0.875rem;
+  }
+}
