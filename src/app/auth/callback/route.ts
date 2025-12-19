@@ -1,5 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -20,7 +19,11 @@ export async function GET(request: NextRequest) {
   }
 
   if (code) {
-    const supabase = createRouteHandlerClient({ cookies });
+    // Create Supabase client
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
     try {
       // Exchange code for session
@@ -37,7 +40,24 @@ export async function GET(request: NextRequest) {
 
       if (data.session) {
         // Email verified successfully - redirect to dashboard
-        return NextResponse.redirect(`${requestUrl.origin}/dashboard`);
+        const response = NextResponse.redirect(`${requestUrl.origin}/dashboard`);
+
+        // Set session cookies
+        response.cookies.set('sb-access-token', data.session.access_token, {
+          path: '/',
+          secure: process.env.NODE_ENV === 'production',
+          httpOnly: true,
+          sameSite: 'lax',
+        });
+
+        response.cookies.set('sb-refresh-token', data.session.refresh_token, {
+          path: '/',
+          secure: process.env.NODE_ENV === 'production',
+          httpOnly: true,
+          sameSite: 'lax',
+        });
+
+        return response;
       }
     } catch (error) {
       console.error('Callback error:', error);

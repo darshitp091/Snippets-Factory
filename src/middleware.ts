@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
@@ -16,13 +17,23 @@ export async function middleware(req: NextRequest) {
 
   // Only enable authentication when Supabase is properly configured
   try {
-    const authHelpers = await import('@supabase/auth-helpers-nextjs');
-    const supabase = authHelpers.createMiddlewareClient({ req, res });
+    // Get session tokens from cookies
+    const accessToken = req.cookies.get('sb-access-token')?.value;
+    const refreshToken = req.cookies.get('sb-refresh-token')?.value;
 
-    // Refresh session if expired
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+    // Create Supabase client
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    let session = null;
+
+    // If we have tokens, verify the session
+    if (accessToken && refreshToken) {
+      const { data } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+      session = data.session;
+    }
 
     // Protect dashboard routes
     if (req.nextUrl.pathname.startsWith('/dashboard')) {
