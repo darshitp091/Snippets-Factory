@@ -3,10 +3,10 @@ import { supabase } from '@/lib/supabase';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const snippetId = params.id;
+    const { id: snippetId } = await params;
 
     // Fetch snippet with creator info
     const { data: snippet, error } = await supabase
@@ -70,10 +70,10 @@ export async function GET(
 // POST endpoint to increment usage count when code is copied
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const snippetId = params.id;
+    const { id: snippetId } = await params;
 
     // Increment usage count
     const { error } = await supabase

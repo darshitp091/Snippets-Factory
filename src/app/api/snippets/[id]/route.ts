@@ -4,7 +4,7 @@ import { rateLimiter } from '@/utils/security';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Rate limiting
@@ -16,7 +16,8 @@ export async function GET(
       );
     }
 
-    const result = await SnippetService.getSnippet(params.id);
+    const { id } = await params;
+    const result = await SnippetService.getSnippet(id);
 
     if (!result.success) {
       return NextResponse.json(
@@ -37,7 +38,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Rate limiting
@@ -49,8 +50,9 @@ export async function PUT(
       );
     }
 
+    const { id } = await params;
     const body = await request.json();
-    const result = await SnippetService.updateSnippet(params.id, body);
+    const result = await SnippetService.updateSnippet(id, body);
 
     if (!result.success) {
       return NextResponse.json(
@@ -71,7 +73,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Rate limiting
@@ -83,7 +85,8 @@ export async function DELETE(
       );
     }
 
-    const result = await SnippetService.deleteSnippet(params.id);
+    const { id } = await params;
+    const result = await SnippetService.deleteSnippet(id);
 
     if (!result.success) {
       return NextResponse.json(
