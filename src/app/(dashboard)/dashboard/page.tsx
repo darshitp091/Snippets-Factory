@@ -43,117 +43,80 @@ export default function DashboardPage() {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' as 'success' | 'error' | 'info' });
 
   useEffect(() => {
-    // Mock data - will be replaced with real Supabase data later
-    const mockSnippets: Snippet[] = [
-      {
-        id: '1',
-        title: 'React Hook Form Validation',
-        description: 'Complete form validation with error handling',
-        code: `const { register, handleSubmit, formState: { errors } } = useForm();
-
-const onSubmit = (data) => {
-  console.log(data);
-};`,
-        language: 'typescript',
-        category: 'React',
-        tags: ['hooks', 'forms', 'validation'],
-        usage_count: 45,
-        created_at: '2024-12-15',
-        is_favorite: true,
-        is_private: false,
-      },
-      {
-        id: '2',
-        title: 'Python List Comprehension',
-        description: 'Filter and transform lists efficiently',
-        code: `# Filter even numbers
-evens = [x for x in range(100) if x % 2 == 0]
-
-# Square all numbers
-squares = [x**2 for x in range(10)]`,
-        language: 'python',
-        category: 'Python',
-        tags: ['list', 'comprehension', 'filter'],
-        usage_count: 38,
-        created_at: '2024-12-10',
-        is_favorite: false,
-        is_private: false,
-      },
-      {
-        id: '3',
-        title: 'SQL Join Query',
-        description: 'Inner join with filtering and sorting',
-        code: `SELECT u.name, o.order_date, o.total
-FROM users u
-INNER JOIN orders o ON u.id = o.user_id
-WHERE o.status = 'completed'
-ORDER BY o.order_date DESC;`,
-        language: 'sql',
-        category: 'Database',
-        tags: ['sql', 'join', 'query'],
-        usage_count: 32,
-        created_at: '2024-12-08',
-        is_favorite: true,
-        is_private: false,
-      },
-      {
-        id: '4',
-        title: 'Go Error Handling',
-        description: 'Proper error handling pattern in Go',
-        code: `func readFile(path string) ([]byte, error) {
-    data, err := os.ReadFile(path)
-    if err != nil {
-        return nil, fmt.Errorf("failed: %w", err)
-    }
-    return data, nil
-}`,
-        language: 'go',
-        category: 'Go',
-        tags: ['error', 'handling', 'file'],
-        usage_count: 28,
-        created_at: '2024-11-25',
-        is_favorite: false,
-        is_private: false,
-      },
-      {
-        id: '5',
-        title: 'Rust Option Pattern',
-        description: 'Safe division with Option type',
-        code: `fn divide(a: f64, b: f64) -> Option<f64> {
-    if b == 0.0 {
-        None
-    } else {
-        Some(a / b)
-    }
-}`,
-        language: 'rust',
-        category: 'Rust',
-        tags: ['option', 'pattern', 'safe'],
-        usage_count: 24,
-        created_at: '2024-11-20',
-        is_favorite: false,
-        is_private: false,
-      },
-      {
-        id: '6',
-        title: 'Java Stream Filter',
-        description: 'Filter and map with Java streams',
-        code: `List<String> filtered = list.stream()
-    .filter(s -> s.length() > 5)
-    .map(String::toUpperCase)
-    .collect(Collectors.toList());`,
-        language: 'java',
-        category: 'Java',
-        tags: ['stream', 'filter', 'lambda'],
-        usage_count: 22,
-        created_at: '2024-11-15',
-        is_favorite: true,
-        is_private: false,
-      },
-    ];
-
-    setSnippets(mockSnippets);
+    loadSnippets();
   }, []);
+
+  const loadSnippets = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        setToast({ show: true, message: 'Please login to view snippets', type: 'error' });
+        return;
+      }
+
+      // Get user's team_id
+      const { data: teamMember } = await supabase
+        .from('team_members')
+        .select('team_id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!teamMember) {
+        console.log('No team found for user');
+        return;
+      }
+
+      // Fetch snippets for the user's team
+      const { data: snippetsData, error } = await supabase
+        .from('snippets')
+        .select(`
+          id,
+          title,
+          description,
+          code,
+          language,
+          tags,
+          usage_count,
+          created_at,
+          is_favorite,
+          is_public,
+          categories (
+            name
+          )
+        `)
+        .eq('team_id', teamMember.team_id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading snippets:', error);
+        setToast({ show: true, message: 'Failed to load snippets', type: 'error' });
+        return;
+      }
+
+      // Transform the data to match the Snippet interface
+      const transformedSnippets: Snippet[] = (snippetsData || []).map((s: any) => ({
+        id: s.id,
+        title: s.title,
+        description: s.description || '',
+        code: s.code,
+        language: s.language,
+        category: (s.categories && typeof s.categories === 'object' && !Array.isArray(s.categories))
+          ? s.categories.name
+          : 'Uncategorized',
+        tags: s.tags || [],
+        usage_count: s.usage_count || 0,
+        created_at: s.created_at,
+        is_favorite: s.is_favorite || false,
+        is_private: !s.is_public,
+      }));
+
+      setSnippets(transformedSnippets);
+    } catch (error) {
+      console.error('Error in loadSnippets:', error);
+      setToast({ show: true, message: 'Failed to load snippets', type: 'error' });
+    }
+  };
 
   // Real-time analytics calculations
   const totalSnippets = snippets.length;

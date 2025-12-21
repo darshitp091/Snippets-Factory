@@ -57,7 +57,14 @@ export default function LoginPage() {
         return;
       }
 
-      if (data.user) {
+      if (data.session) {
+        // Store session in cookies
+        document.cookie = `sb-access-token=${data.session.access_token}; path=/; max-age=3600; SameSite=Lax`;
+        document.cookie = `sb-refresh-token=${data.session.refresh_token}; path=/; max-age=3600; SameSite=Lax`;
+
+        // Small delay to ensure cookies are set
+        await new Promise(resolve => setTimeout(resolve, 100));
+
         // Redirect to dashboard after successful login
         router.push('/dashboard');
       }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 import {
@@ -47,6 +48,7 @@ export default function SnippetsPage() {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' as 'success' | 'error' | 'info' });
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeModalData, setUpgradeModalData] = useState({ message: '', current: 0, max: 0 });
+  const [isMounted, setIsMounted] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -59,6 +61,11 @@ export default function SnippetsPage() {
     is_private: false,
   });
 
+  // Set mounted state for portal
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Load snippets from API
   useEffect(() => {
     loadSnippets();
@@ -67,7 +74,31 @@ export default function SnippetsPage() {
   const loadSnippets = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/snippets');
+
+      // Get authenticated user
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        setToast({ show: true, message: 'Please login to view snippets', type: 'error' });
+        setLoading(false);
+        return;
+      }
+
+      // Get user's team_id
+      const { data: teamMember } = await supabase
+        .from('team_members')
+        .select('team_id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!teamMember) {
+        console.log('No team found for user');
+        setLoading(false);
+        return;
+      }
+
+      // Fetch snippets with team_id parameter
+      const response = await fetch(`/api/snippets?team_id=${teamMember.team_id}`);
 
       if (!response.ok) {
         throw new Error('Failed to load snippets');
@@ -550,22 +581,31 @@ export default function SnippetsPage() {
       </div>
 
       {/* Create/Edit Modal */}
-      <AnimatePresence>
-        {showCreateModal && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className={styles.modalOverlay}
-              onClick={() => !saving && setShowCreateModal(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className={styles.modal}
-            >
+      {isMounted && createPortal(
+        <AnimatePresence mode="wait">
+          {showCreateModal && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className={styles.modalOverlay}
+                onClick={() => !saving && setShowCreateModal(false)}
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className={styles.modal}
+                style={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)'
+                }}
+              >
               <div className={styles.modalHeader}>
                 <h2>{editingSnippet ? 'Edit Snippet' : 'Create New Snippet'}</h2>
                 <button
@@ -709,10 +749,12 @@ export default function SnippetsPage() {
                   )}
                 </button>
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 }

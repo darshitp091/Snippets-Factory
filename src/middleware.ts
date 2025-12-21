@@ -35,8 +35,21 @@ export async function middleware(req: NextRequest) {
       session = data.session;
     }
 
-    // Protect dashboard routes
-    if (req.nextUrl.pathname.startsWith('/dashboard')) {
+    // Protect authenticated routes (all routes under (dashboard) route group)
+    const protectedPaths = [
+      '/dashboard',
+      '/communities',
+      '/analytics',
+      '/settings',
+      '/snippets', // Dashboard snippets page (not public snippet view)
+      '/discover',
+    ];
+
+    const isProtectedRoute = protectedPaths.some(path =>
+      req.nextUrl.pathname === path || req.nextUrl.pathname.startsWith(path + '/')
+    );
+
+    if (isProtectedRoute) {
       if (!session) {
         // Redirect to login if not authenticated
         const redirectUrl = new URL('/login', req.url);
@@ -57,5 +70,14 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/login', '/signup'],
+  matcher: [
+    '/dashboard/:path*',
+    '/communities/:path*',
+    '/analytics/:path*',
+    '/settings/:path*',
+    '/snippets',
+    '/discover',
+    '/login',
+    '/signup'
+  ],
 };

@@ -453,6 +453,275 @@ export default function PricingPage() {
             ))}
           </motion.div>
 
+          {/* Community Verification Section */}
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            style={{ marginBottom: '80px' }}
+          >
+            <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+              <h2 style={{
+                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                fontWeight: '700',
+                color: '#2C3E2B',
+                marginBottom: '16px'
+              }}>
+                Community Verification
+              </h2>
+              <p style={{
+                fontSize: '1.125rem',
+                color: '#666',
+                maxWidth: '700px',
+                margin: '0 auto',
+                lineHeight: '1.6'
+              }}>
+                Stand out with verified badges for your communities. Get priority visibility and build trust.
+              </p>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '24px'
+            }}>
+              {/* Blue Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                whileHover={{ y: -8 }}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(59, 130, 246, 0.3)',
+                  borderRadius: '20px',
+                  padding: '32px',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{
+                  width: '64px',
+                  height: '64px',
+                  margin: '0 auto 20px',
+                  borderRadius: '12px',
+                  background: 'rgba(59, 130, 246, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#3B82F6',
+                  fontSize: '2rem'
+                }}>
+                  ✓
+                </div>
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#2C3E2B',
+                  marginBottom: '8px'
+                }}>
+                  Blue Verification
+                </h3>
+                <div style={{ margin: '20px 0' }}>
+                  <span style={{
+                    fontSize: '3rem',
+                    fontWeight: '700',
+                    color: '#3B82F6'
+                  }}>
+                    ₹499
+                  </span>
+                  <span style={{ color: '#666' }}>/year</span>
+                </div>
+                <ul style={{
+                  listStyle: 'none',
+                  padding: 0,
+                  margin: '24px 0',
+                  textAlign: 'left'
+                }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#3B82F6' }} />
+                    Blue verified badge
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#3B82F6' }} />
+                    Priority support
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#3B82F6' }} />
+                    Enhanced visibility
+                  </li>
+                </ul>
+              </motion.div>
+
+              {/* Green Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                whileHover={{ y: -8 }}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(10px)',
+                  border: '2px solid #10B981',
+                  borderRadius: '20px',
+                  padding: '32px',
+                  textAlign: 'center',
+                  position: 'relative',
+                  boxShadow: '0 10px 40px rgba(16, 185, 129, 0.15)'
+                }}
+              >
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                  color: '#ffffff',
+                  fontSize: '0.75rem',
+                  fontWeight: '700',
+                  padding: '6px 16px',
+                  borderBottomLeftRadius: '12px'
+                }}>
+                  POPULAR
+                </div>
+                <div style={{
+                  width: '64px',
+                  height: '64px',
+                  margin: '0 auto 20px',
+                  borderRadius: '12px',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#10B981',
+                  fontSize: '2rem'
+                }}>
+                  🛡️
+                </div>
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#2C3E2B',
+                  marginBottom: '8px'
+                }}>
+                  Green Verification
+                </h3>
+                <div style={{ margin: '20px 0' }}>
+                  <span style={{
+                    fontSize: '3rem',
+                    fontWeight: '700',
+                    color: '#10B981'
+                  }}>
+                    ₹999
+                  </span>
+                  <span style={{ color: '#666' }}>/year</span>
+                </div>
+                <ul style={{
+                  listStyle: 'none',
+                  padding: 0,
+                  margin: '24px 0',
+                  textAlign: 'left'
+                }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#10B981' }} />
+                    Green verified badge
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#10B981' }} />
+                    All Blue features
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#10B981' }} />
+                    Analytics dashboard
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#10B981' }} />
+                    Featured placement
+                  </li>
+                </ul>
+              </motion.div>
+
+              {/* Gold Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                whileHover={{ y: -8 }}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  borderRadius: '20px',
+                  padding: '32px',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{
+                  width: '64px',
+                  height: '64px',
+                  margin: '0 auto 20px',
+                  borderRadius: '12px',
+                  background: 'rgba(245, 158, 11, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#F59E0B',
+                  fontSize: '2rem'
+                }}>
+                  👑
+                </div>
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#2C3E2B',
+                  marginBottom: '8px'
+                }}>
+                  Gold Verification
+                </h3>
+                <div style={{ margin: '20px 0' }}>
+                  <span style={{
+                    fontSize: '3rem',
+                    fontWeight: '700',
+                    color: '#F59E0B'
+                  }}>
+                    ₹1,999
+                  </span>
+                  <span style={{ color: '#666' }}>/year</span>
+                </div>
+                <ul style={{
+                  listStyle: 'none',
+                  padding: 0,
+                  margin: '24px 0',
+                  textAlign: 'left'
+                }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#F59E0B' }} />
+                    Gold verified badge
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#F59E0B' }} />
+                    All Green features
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#F59E0B' }} />
+                    API access
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#F59E0B' }} />
+                    Custom integrations
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#666' }}>
+                    <Check size={18} style={{ color: '#F59E0B' }} />
+                    Top priority placement
+                  </li>
+                </ul>
+              </motion.div>
+            </div>
+          </motion.div>
+
           {/* FAQ Section */}
           <motion.div
             initial={{ y: 50, opacity: 0 }}

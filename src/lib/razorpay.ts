@@ -79,9 +79,9 @@ export async function createRazorpayOrder(
       currency: 'INR',
       receipt: `order_${Date.now()}`,
       notes: {
-        userId,
-        plan,
-        billing,
+        user_id: userId, // Changed from userId to user_id for webhook compatibility
+        plan_type: plan, // Changed from plan to plan_type for webhook compatibility
+        duration_type: billing === 'monthly' ? 'monthly' : 'yearly', // Changed from billing to duration_type
       },
     };
 

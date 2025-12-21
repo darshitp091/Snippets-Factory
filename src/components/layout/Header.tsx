@@ -9,17 +9,39 @@ import styles from './Header.module.css';
 
 export default function Header() {
   const [user, setUser] = useState<any>(null);
+  const [userPlan, setUserPlan] = useState<'free' | 'pro' | 'enterprise'>('free');
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const fetchUserData = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
-    });
+
+      if (session?.user) {
+        // Fetch user plan from database
+        const { data: userData } = await supabase
+          .from('users')
+          .select('plan')
+          .eq('id', session.user.id)
+          .single();
+
+        if (userData) {
+          setUserPlan(userData.plan as 'free' | 'pro' | 'enterprise');
+        }
+      }
+    };
+
+    fetchUserData();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchUserData();
+      } else {
+        setUserPlan('free');
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -49,21 +71,54 @@ export default function Header() {
         </Link>
 
         <nav className={styles.nav}>
-          <Link href="/" className={styles.navLink}>
-            Home
-          </Link>
-          <Link href="/features" className={styles.navLink}>
-            Features
-          </Link>
-          <Link href="/pricing" className={styles.navLink}>
-            Pricing
-          </Link>
-          <Link href="/about" className={styles.navLink}>
-            About
-          </Link>
-          <Link href="/contact" className={styles.navLink}>
-            Contact Us
-          </Link>
+          {user ? (
+            // Authenticated navigation - show features based on plan
+            <>
+              <Link href="/dashboard" className={styles.navLink}>
+                Dashboard
+              </Link>
+              <Link href="/snippets" className={styles.navLink}>
+                My Snippets
+              </Link>
+              <Link href="/discover" className={styles.navLink}>
+                Discover
+              </Link>
+              <Link href="/communities" className={styles.navLink}>
+                Communities
+              </Link>
+              {/* Analytics - only for Pro and Enterprise */}
+              {(userPlan === 'pro' || userPlan === 'enterprise') && (
+                <Link href="/analytics" className={styles.navLink}>
+                  Analytics
+                </Link>
+              )}
+              {/* Team - only for Pro and Enterprise */}
+              {(userPlan === 'pro' || userPlan === 'enterprise') && (
+                <Link href="/team" className={styles.navLink}>
+                  Team
+                </Link>
+              )}
+            </>
+          ) : (
+            // Public navigation
+            <>
+              <Link href="/" className={styles.navLink}>
+                Home
+              </Link>
+              <Link href="/features" className={styles.navLink}>
+                Features
+              </Link>
+              <Link href="/pricing" className={styles.navLink}>
+                Pricing
+              </Link>
+              <Link href="/about" className={styles.navLink}>
+                About
+              </Link>
+              <Link href="/contact" className={styles.navLink}>
+                Contact Us
+              </Link>
+            </>
+          )}
         </nav>
 
         <div className={styles.actions}>

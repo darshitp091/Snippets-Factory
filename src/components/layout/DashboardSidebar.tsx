@@ -14,6 +14,8 @@ import {
   Crown,
   Lock,
   User,
+  Compass,
+  UserCircle,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { usePlanAccess } from '@/lib/plans';
@@ -63,7 +65,12 @@ export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarPr
     router.push('/');
   };
 
-  const navigationItems = [
+  const navigationItems: Array<{
+    name: string;
+    href: string;
+    icon: any;
+    requiresPlan: 'pro' | 'enterprise' | null;
+  }> = [
     {
       name: 'Dashboard',
       href: '/dashboard',
@@ -77,16 +84,28 @@ export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarPr
       requiresPlan: null,
     },
     {
+      name: 'Discover',
+      href: '/discover',
+      icon: Compass,
+      requiresPlan: null,
+    },
+    {
+      name: 'Communities',
+      href: '/communities',
+      icon: UserCircle,
+      requiresPlan: null,
+    },
+    {
       name: 'Analytics',
       href: '/analytics',
       icon: BarChart3,
-      requiresPlan: 'pro' as const,
+      requiresPlan: 'pro',
     },
     {
       name: 'Team',
       href: '/team',
       icon: Users,
-      requiresPlan: 'pro' as const,
+      requiresPlan: 'pro',
     },
     {
       name: 'Settings',
@@ -131,27 +150,30 @@ export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarPr
         <nav className={styles.nav}>
           {navigationItems.map((item) => {
             const isActive = pathname === item.href;
-            const isLocked = item.requiresPlan && !planAccess.hasFeature('analytics');
             const Icon = item.icon;
+
+            // Hide locked features completely based on user's plan
+            if (item.requiresPlan) {
+              // Check if user has the required plan
+              const hasAccess =
+                (item.requiresPlan === 'pro' && (userPlan === 'pro' || userPlan === 'enterprise')) ||
+                (item.requiresPlan === 'enterprise' && userPlan === 'enterprise');
+
+              // Don't render the item if user doesn't have access
+              if (!hasAccess) {
+                return null;
+              }
+            }
 
             return (
               <Link
                 key={item.name}
-                href={isLocked ? '#' : item.href}
-                className={`${styles.navItem} ${isActive ? styles.navItemActive : ''} ${
-                  isLocked ? styles.navItemLocked : ''
-                }`}
-                onClick={(e) => {
-                  if (isLocked) {
-                    e.preventDefault();
-                  } else {
-                    onClose();
-                  }
-                }}
+                href={item.href}
+                className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+                onClick={onClose}
               >
                 <Icon size={20} />
                 <span>{item.name}</span>
-                {isLocked && <Lock size={16} className={styles.lockIcon} />}
               </Link>
             );
           })}
