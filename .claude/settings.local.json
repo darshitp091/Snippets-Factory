@@ -34,7 +34,10 @@
       "Bash(curl:*)",
       "Bash(grep:*)",
       "Bash(dir:*)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nImplement complete SaaS automation with payment webhooks and smart feature hiding\n\n## Major Features Implemented\n\n### 1. Automatic Plan Upgrades via Razorpay Webhooks\n- Created webhook endpoint at /api/webhooks/razorpay\n- Automatic plan upgrade when payment is captured\n- Plan expiry date set based on billing cycle \\(monthly/yearly\\)\n- Payment history recorded in database\n- Webhook signature verification for security\n\n### 2. Automatic Plan Downgrades\n- Database migration with plan expiry tracking\n- PostgreSQL function to auto-downgrade expired plans\n- pg_cron job support for daily expiry checks\n- Automatic triggers for timestamp updates\n\n### 3. Smart Feature Hiding \\(Not Locking\\)\n- Features completely hidden based on user plan\n- Free users: Dashboard, Snippets, Discover, Communities\n- Pro users: All Free + Analytics + Team\n- Enterprise users: All features\n- Clean UI without confusing lock icons\n\n### 4. Database Enhancements\n- payment_history table for transaction tracking\n- plan_expires_at and plan_updated_at columns\n- RLS policies for data security\n- Automatic triggers for timestamp management\n\n### 5. Communities & Discover Features\n- Moved to authenticated route group \\(dashboard\\)\n- Fixed Supabase query errors with manual joins\n- Social platform features with verification system\n- Comments and voting on snippets\n\n## Technical Improvements\n\n- Fixed Next.js 15+ async params in all API routes\n- Updated TypeScript interfaces for type safety\n- Improved error handling and validation\n- Added comprehensive documentation\n\n## Files Added\n- src/app/api/webhooks/razorpay/route.ts\n- supabase/migrations/20241220_payment_automation.sql\n- PAYMENT_AUTOMATION_SETUP.md\n- AUTOMATION_COMPLETE.md\n\n## Files Modified\n- src/components/layout/DashboardSidebar.tsx\n- src/components/layout/Header.tsx\n- src/lib/razorpay.ts\n- .env.local.example\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(node test-razorpay.js:*)",
+      "Bash(node test-webhook.js:*)"
     ]
   }
 }
