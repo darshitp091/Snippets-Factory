@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MoreVertical, Trash2, Copy, Share2, FolderOpen } from 'lucide-react';
+import { MoreVertical, Trash2, Copy, Share2, FolderOpen, Users } from 'lucide-react';
 import styles from './SnippetMenu.module.css';
 
 interface SnippetMenuProps {
@@ -10,6 +10,7 @@ interface SnippetMenuProps {
   onDelete: (id: string) => void;
   onDuplicate: (id: string) => void;
   onShare: (id: string) => void;
+  onShareToCommunity?: (id: string) => void;
   onMove?: (id: string) => void;
 }
 
@@ -18,6 +19,7 @@ export default function SnippetMenu({
   onDelete,
   onDuplicate,
   onShare,
+  onShareToCommunity,
   onMove,
 }: SnippetMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -85,8 +87,21 @@ export default function SnippetMenu({
               className={styles.menuItem}
             >
               <Share2 size={16} />
-              <span>Share</span>
+              <span>Copy Share Link</span>
             </button>
+
+            {onShareToCommunity && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAction(() => onShareToCommunity(snippetId));
+                }}
+                className={styles.menuItem}
+              >
+                <Users size={16} />
+                <span>Share to Community</span>
+              </button>
+            )}
 
             {onMove && (
               <button

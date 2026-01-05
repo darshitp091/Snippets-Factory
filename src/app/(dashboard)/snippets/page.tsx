@@ -20,6 +20,7 @@ import { getLanguageColor } from '@/lib/languageColors';
 import SnippetMenu from '@/components/dashboard/SnippetMenu';
 import Toast from '@/components/ui/Toast';
 import UpgradeModal from '@/components/ui/UpgradeModal';
+import ShareToCommunityModal from '@/components/snippets/ShareToCommunityModal';
 import styles from './page.module.css';
 
 interface Snippet {
@@ -49,6 +50,8 @@ export default function SnippetsPage() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeModalData, setUpgradeModalData] = useState({ message: '', current: 0, max: 0 });
   const [isMounted, setIsMounted] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [snippetToShare, setSnippetToShare] = useState<string | null>(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -265,6 +268,15 @@ export default function SnippetsPage() {
     }
   };
 
+  const handleShareToCommunity = (snippetId: string) => {
+    setSnippetToShare(snippetId);
+    setShareModalOpen(true);
+  };
+
+  const handleShareSuccess = () => {
+    setToast({ show: true, message: 'Snippet shared to community successfully!', type: 'success' });
+  };
+
   // Open create modal
   const handleOpenCreate = () => {
     setFormData({
@@ -474,6 +486,7 @@ export default function SnippetsPage() {
                       onDelete={handleDelete}
                       onDuplicate={handleDuplicate}
                       onShare={handleShare}
+                      onShareToCommunity={handleShareToCommunity}
                       onMove={() => handleTogglePrivacy(snippet.id)}
                     />
                   </div>
@@ -754,6 +767,19 @@ export default function SnippetsPage() {
           )}
         </AnimatePresence>,
         document.body
+      )}
+
+      {/* Share to Community Modal */}
+      {snippetToShare && (
+        <ShareToCommunityModal
+          snippetId={snippetToShare}
+          isOpen={shareModalOpen}
+          onClose={() => {
+            setShareModalOpen(false);
+            setSnippetToShare(null);
+          }}
+          onSuccess={handleShareSuccess}
+        />
       )}
     </>
   );
