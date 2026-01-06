@@ -1,0 +1,49 @@
+.adContainer {
+  width: 100%;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+}
+
+.adPlaceholder {
+  width: 100%;
+  min-height: 250px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border: 2px dashed #cbd5e0;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.adPlaceholderContent {
+  text-align: center;
+  color: #718096;
+  padding: 20px;
+}
+
+.adPlaceholderContent p {
+  margin: 8px 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.adDetails {
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  color: #a0aec0;
+}
+
+/* Responsive ad sizes */
+@media (max-width: 768px) {
+  .adContainer {
+    min-height: 90px;
+  }
+
+  .adPlaceholder {
+    min-height: 200px;
+  }
+}

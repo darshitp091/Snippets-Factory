@@ -20,6 +20,7 @@ import {
   MessageSquare,
   CheckCircle2,
 } from 'lucide-react';
+import ConditionalAd from '@/components/ConditionalAd';
 import styles from './page.module.css';
 
 interface SearchResult {
@@ -222,6 +223,9 @@ export default function SearchPage() {
         </motion.div>
       )}
 
+      {/* Ad Banner (Free users only) */}
+      <ConditionalAd slot="1234567890" format="auto" responsive />
+
       {/* Results */}
       <div className={styles.results}>
         {loading ? (
@@ -287,6 +291,11 @@ export default function SearchPage() {
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* In-feed Ad (Free users only) */}
+            {results.snippets.length > 0 && (
+              <ConditionalAd slot="9876543210" format="fluid" responsive />
             )}
 
             {/* Communities Results */}

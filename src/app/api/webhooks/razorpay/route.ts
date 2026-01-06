@@ -42,11 +42,35 @@ export async function POST(request: NextRequest) {
 
       // Get payment details from notes
       const userId = notes?.user_id;
+      const paymentType = notes?.type; // 'subscription' or 'coins_purchase'
       const planType = notes?.plan_type; // 'free', 'pro', 'enterprise'
       const durationType = notes?.duration_type; // 'monthly', 'yearly'
 
-      if (!userId || !planType) {
-        console.error('Missing user_id or plan_type in payment notes');
+      if (!userId) {
+        console.error('Missing user_id in payment notes');
+        return NextResponse.json({ error: 'Invalid payment data' }, { status: 400 });
+      }
+
+      // Handle coin purchases
+      if (paymentType === 'coins_purchase') {
+        const { error: coinError } = await supabase.rpc('complete_coin_purchase', {
+          p_order_id: order_id,
+          p_payment_id: paymentId,
+          p_signature: signature,
+        });
+
+        if (coinError) {
+          console.error('Error completing coin purchase:', coinError);
+          return NextResponse.json({ error: 'Failed to complete coin purchase' }, { status: 500 });
+        }
+
+        console.log(`Successfully added coins to user ${userId}`);
+        return NextResponse.json({ success: true, message: 'Coins added successfully' });
+      }
+
+      // Handle plan subscriptions
+      if (!planType) {
+        console.error('Missing plan_type in payment notes');
         return NextResponse.json({ error: 'Invalid payment data' }, { status: 400 });
       }
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SnippetService } from '@/lib/snippetService';
 import { rateLimiter, containsSQLInjection } from '@/utils/security';
+import { verifySnippetLimit, trackUsage } from '@/lib/middleware/planVerification';
 
 export async function GET(request: NextRequest) {
   try {
@@ -88,6 +89,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // SERVER-SIDE SNIPPET LIMIT VERIFICATION
+    const limitCheck = await verifySnippetLimit(body.created_by);
+    if (!limitCheck.authorized && limitCheck.errorResponse) {
+      return limitCheck.errorResponse;
+    }
+
     const result = await SnippetService.createSnippet(body);
 
     if (!result.success) {
@@ -96,6 +103,9 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Track snippet creation
+    await trackUsage(body.created_by, 'snippets', 'create');
 
     return NextResponse.json(result.data, { status: 201 });
   } catch (error) {
