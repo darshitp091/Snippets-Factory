@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@/lib/supabaseServer';
 import crypto from 'crypto';
 import { verifyFeatureAccess } from '@/lib/middleware/planVerification';
 
@@ -16,7 +15,7 @@ export async function POST(request: NextRequest) {
     const userId = verification.userId!;
     const plan = verification.plan!;
 
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Generate a unique API key
     const apiKey = `sf_${crypto.randomBytes(32).toString('hex')}`;

@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@/lib/supabaseServer';
 
 // GET: Fetch team members (Pro/Enterprise only)
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Get authenticated user
     const {
@@ -101,7 +100,7 @@ export async function GET(request: NextRequest) {
 // POST: Add team member (Pro/Enterprise only with limit enforcement)
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Get authenticated user
     const {
@@ -241,7 +240,7 @@ export async function POST(request: NextRequest) {
 // DELETE: Remove team member
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Get authenticated user
     const {

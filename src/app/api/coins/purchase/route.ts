@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@/lib/supabaseServer';
 import Razorpay from 'razorpay';
 
 const razorpay = new Razorpay({
@@ -32,7 +31,7 @@ const COIN_PACKAGES = {
 // POST: Create Razorpay order for coin purchase
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Get authenticated user
     const {

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@/lib/supabaseServer';
 import { verifyFeatureAccess } from '@/lib/middleware/planVerification';
 
 // GET: List user's API keys
@@ -13,7 +12,7 @@ export async function GET(request: NextRequest) {
     }
 
     const userId = verification.userId!;
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Fetch API keys (without revealing the actual keys)
     const { data: keys, error: keysError } = await supabase
@@ -68,7 +67,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const userId = verification.userId!;
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     const searchParams = request.nextUrl.searchParams;
     const keyId = searchParams.get('id');

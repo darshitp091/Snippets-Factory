@@ -1,5 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@/lib/supabaseServer';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -24,7 +23,7 @@ export async function verifyFeatureAccess(
   feature: string
 ): Promise<VerificationResult> {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Get authenticated user
     const {
@@ -141,7 +140,7 @@ export async function trackUsage(
   metadata: any = {}
 ) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     await supabase.rpc('track_usage', {
       p_user_id: userId,
@@ -163,7 +162,7 @@ export async function trackUsage(
  */
 export async function verifySnippetLimit(userId: string): Promise<VerificationResult> {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Get user's current snippet count and limit
     const { data: userData, error: userError } = await supabase
@@ -229,7 +228,7 @@ export async function verifySnippetLimit(userId: string): Promise<VerificationRe
  */
 export async function verifyTeamMemberLimit(userId: string): Promise<VerificationResult> {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     // Get user's current team count and limit
     const { data: userData, error: userError } = await supabase
@@ -294,7 +293,7 @@ export async function verifyTeamMemberLimit(userId: string): Promise<Verificatio
  */
 export async function isSubscriptionActive(userId: string): Promise<boolean> {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
 
     const { data: userData } = await supabase
       .from('users')
