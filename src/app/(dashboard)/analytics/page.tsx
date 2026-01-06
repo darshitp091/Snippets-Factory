@@ -148,7 +148,7 @@ export default function AnalyticsPage() {
       const communityStats = {
         communitiesJoined: communityMemberships?.length || 0,
         snippetsShared: communitySnippets?.length || 0,
-        totalReach: communitySnippets?.length * 10 || 0, // Estimate
+        totalReach: (communitySnippets?.length || 0) * 10, // Estimate
       };
 
       // Recent activity (mock data for now - can be enhanced with time-series)
