@@ -147,6 +147,16 @@ export default function TeamPage() {
   const handleInviteMember = async () => {
     if (!inviteEmail || !team || !currentUserId) return;
 
+    // Check member limit
+    if (members.length >= team.max_members) {
+      setToast({
+        show: true,
+        message: `Team member limit reached (${team.max_members} members). Please upgrade your plan.`,
+        type: 'error',
+      });
+      return;
+    }
+
     try {
       setInviting(true);
 
@@ -393,12 +403,39 @@ export default function TeamPage() {
         </div>
 
         {canManageTeam && (
-          <button onClick={() => setShowInviteModal(true)} className={styles.inviteButton}>
+          <button
+            onClick={() => setShowInviteModal(true)}
+            className={styles.inviteButton}
+            disabled={members.length >= team.max_members}
+            title={members.length >= team.max_members ? 'Team member limit reached' : 'Invite a new team member'}
+          >
             <UserPlus size={18} />
             Invite Member
+            {members.length >= team.max_members && <span className={styles.lockIcon}>🔒</span>}
           </button>
         )}
       </div>
+
+      {/* Member Limit Warning */}
+      {members.length >= team.max_members && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={styles.limitWarning}
+        >
+          <div className={styles.limitWarningIcon}>⚠️</div>
+          <div className={styles.limitWarningContent}>
+            <h3>Team Member Limit Reached</h3>
+            <p>
+              You've reached your team member limit ({team.max_members} members).
+              {team.plan === 'pro' ? ' Upgrade to Enterprise for unlimited members.' : ' Upgrade your plan to add more members.'}
+            </p>
+          </div>
+          <Link href="/pricing" className={styles.limitWarningButton}>
+            Upgrade Plan
+          </Link>
+        </motion.div>
+      )}
 
       {/* Stats */}
       <div className={styles.statsGrid}>
@@ -409,8 +446,11 @@ export default function TeamPage() {
           <div>
             <p className={styles.statLabel}>Team Members</p>
             <h3 className={styles.statValue}>
-              {members.length} / {team.max_members}
+              {members.length} / {team.max_members === 999 ? '∞' : team.max_members}
             </h3>
+            {members.length >= team.max_members && team.max_members !== 999 && (
+              <p className={styles.statWarning}>Limit reached</p>
+            )}
           </div>
         </div>
 

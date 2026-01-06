@@ -35,58 +35,81 @@ export default function PricingPage() {
       name: 'Free',
       icon: Zap,
       price: { monthly: 0, annual: 0 },
-      description: 'Perfect for individual developers',
+      description: 'Perfect for trying out',
       features: [
-        '50 snippets',
-        '1 team',
+        '10 snippets',
+        '1 collection',
         'Basic search',
         'Community support',
         'Mobile app access',
+        'With ads',
       ],
       cta: 'Get Started',
       color: 'from-gray-600 to-gray-800',
       popular: false,
     },
     {
+      name: 'Basic',
+      icon: Zap,
+      price: { monthly: 5, annual: 48 },
+      description: 'For individual developers',
+      features: [
+        '50 snippets',
+        '5 collections',
+        'No ads',
+        'Advanced search',
+        'Email support',
+        'All export formats',
+        'Syntax highlighting',
+      ],
+      cta: 'Upgrade to Basic',
+      color: 'from-green-600 to-green-800',
+      popular: false,
+      savings: 'Save $12/year',
+    },
+    {
       name: 'Pro',
       icon: Users,
       price: { monthly: 15, annual: 144 },
-      description: 'For growing teams',
+      description: 'For professional developers',
       features: [
+        'Everything in Basic',
         'Unlimited snippets',
-        'Unlimited teams',
-        'Advanced search with NLP',
-        'Placeholder system',
+        'Unlimited collections',
+        'Team collaboration (5 members)',
         'Analytics dashboard',
-        'Priority support',
+        'AI code generation (100/mo)',
+        'API access (1,000 calls/mo)',
         'Version history',
-        'Custom categories',
-        'Export functionality',
+        'Priority support',
       ],
-      cta: 'Start Free Trial',
+      cta: 'Start Pro Trial',
       color: 'from-tech-blue to-tech-cyan',
       popular: true,
+      savings: 'Save $36/year',
     },
     {
       name: 'Enterprise',
       icon: Building2,
-      price: 'Custom',
+      price: { monthly: 99, annual: 990 },
       description: 'For large organizations',
       features: [
         'Everything in Pro',
+        'Unlimited team members',
+        'Unlimited AI generation',
+        'Unlimited API access',
         'SSO/SAML authentication',
-        'Custom integrations',
+        'Advanced security (SOC 2)',
         'Dedicated support',
-        'On-premise option',
-        'Advanced security',
-        'Custom SLA',
+        'Custom integrations',
         'Audit logs',
-        'API access',
         'White-label option',
+        '99.9% SLA',
       ],
       cta: 'Contact Sales',
       color: 'from-tech-purple to-tech-pink',
       popular: false,
+      savings: 'Save $198/year',
     },
   ];
 
@@ -247,10 +270,11 @@ export default function PricingPage() {
             variants={staggerContainer}
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '32px',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '24px',
               marginBottom: '80px',
-              alignItems: 'stretch'
+              alignItems: 'stretch',
+              maxWidth: '1400px'
             }}
           >
             {plans.map((plan) => (
@@ -332,6 +356,16 @@ export default function PricingPage() {
                         </span>
                         <span style={{ color: '#666', fontSize: '1rem' }}>/user/mo</span>
                       </div>
+                      {billingPeriod === 'annual' && plan.savings && (
+                        <div style={{
+                          marginTop: '8px',
+                          fontSize: '0.875rem',
+                          color: '#588157',
+                          fontWeight: '600'
+                        }}>
+                          {plan.savings}
+                        </div>
+                      )}
                       {billingPeriod === 'annual' && (
                         <p style={{ color: '#999', fontSize: '0.9rem', marginTop: '8px' }}>
                           ${plan.price.annual} billed annually

@@ -9,6 +9,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Link from 'next/link';
 import Toast from '@/components/ui/Toast';
+import AwardButtons from '@/components/snippets/AwardButtons';
 import styles from './page.module.css';
 
 interface Snippet {
@@ -237,6 +238,9 @@ export default function PublicSnippetPage() {
                 </SyntaxHighlighter>
               </div>
             </div>
+
+            {/* Awards Section */}
+            <AwardButtons snippetId={snippetId} />
           </motion.div>
 
           {/* CTA Section */}

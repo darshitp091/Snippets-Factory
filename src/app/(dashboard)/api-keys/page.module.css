@@ -1,0 +1,491 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #EFEFEF;
+}
+
+.subtitle {
+  color: #999;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.createButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #588157 0%, #A3B18A 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.createButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(88, 129, 87, 0.3);
+}
+
+.createButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Banners */
+.upgradeBanner,
+.usageBanner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+
+.upgradeBanner {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #FCA5A5;
+}
+
+.usageBanner {
+  background: rgba(88, 129, 87, 0.1);
+  border: 1px solid rgba(88, 129, 87, 0.3);
+  color: #A3B18A;
+}
+
+.upgradeBannerContent,
+.usageBannerContent {
+  flex: 1;
+}
+
+.upgradeBannerTitle,
+.usageBannerTitle {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  color: #EFEFEF;
+}
+
+.upgradeBannerText,
+.usageBannerText {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.upgradeBannerButton {
+  padding: 10px 20px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #FCA5A5;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.upgradeBannerButton:hover {
+  background: rgba(239, 68, 68, 0.3);
+  transform: translateY(-1px);
+}
+
+.usageBar {
+  width: 200px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.usageBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #588157, #A3B18A);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Loading */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 16px;
+  color: #999;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  color: #999;
+}
+
+.emptyState h3 {
+  margin: 24px 0 8px 0;
+  color: #EFEFEF;
+  font-size: 1.5rem;
+}
+
+.emptyState p {
+  margin: 0;
+  max-width: 500px;
+}
+
+/* Keys List */
+.keysList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.keyCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.keyCard:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.keyHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.keyIcon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #588157 0%, #A3B18A 100%);
+  border-radius: 12px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.keyInfo {
+  flex: 1;
+}
+
+.keyName {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #EFEFEF;
+}
+
+.keyMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #999;
+  flex-wrap: wrap;
+}
+
+.keyValue {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.keyCode {
+  flex: 1;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #A3B18A;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.keyActions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionButton {
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  color: #EFEFEF;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.deleteButton {
+  color: #EF4444;
+}
+
+.deleteButton:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal {
+  background: #1A1A1A;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.modalTitle {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #EFEFEF;
+}
+
+.modalDescription {
+  margin: 0 0 24px 0;
+  color: #999;
+  line-height: 1.6;
+}
+
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #EFEFEF;
+  font-size: 0.9rem;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #EFEFEF;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #588157;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.cancelButton,
+.submitButton {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.cancelButton {
+  background: rgba(255, 255, 255, 0.05);
+  color: #EFEFEF;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.submitButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #588157 0%, #A3B18A 100%);
+  color: white;
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(88, 129, 87, 0.3);
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Documentation */
+.documentation {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px;
+  margin-top: 48px;
+}
+
+.docTitle {
+  margin: 0 0 12px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #EFEFEF;
+}
+
+.docDescription {
+  margin: 0 0 16px 0;
+  color: #999;
+  line-height: 1.6;
+}
+
+.docDescription code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  color: #A3B18A;
+  font-size: 0.9em;
+}
+
+.codeBlock {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.codeBlock code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #A3B18A;
+  line-height: 1.6;
+}
+
+.docFooter {
+  margin: 16px 0 0 0;
+  color: #999;
+}
+
+.link {
+  color: #588157;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #A3B18A;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .createButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .keyHeader {
+    flex-direction: column;
+  }
+
+  .keyValue {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .keyActions {
+    justify-content: center;
+  }
+
+  .usageBar {
+    width: 100%;
+  }
+}

@@ -21,6 +21,7 @@ import SnippetMenu from '@/components/dashboard/SnippetMenu';
 import Toast from '@/components/ui/Toast';
 import UpgradeModal from '@/components/ui/UpgradeModal';
 import ShareToCommunityModal from '@/components/snippets/ShareToCommunityModal';
+import ConditionalAd from '@/components/ConditionalAd';
 import styles from './page.module.css';
 
 interface Snippet {
@@ -411,6 +412,9 @@ export default function SnippetsPage() {
       />
 
       <div className={styles.container}>
+        {/* Ad for Free Users - Top */}
+        <ConditionalAd slot="snippets-top" />
+
         {/* Header */}
         <div className={styles.header}>
           <div>
@@ -455,6 +459,9 @@ export default function SnippetsPage() {
             ))}
           </div>
         </div>
+
+        {/* Ad for Free Users - Before Snippets */}
+        <ConditionalAd slot="snippets-mid" />
 
         {/* Snippets Grid */}
         <div className={styles.snippetsGrid}>

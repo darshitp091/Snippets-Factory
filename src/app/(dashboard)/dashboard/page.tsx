@@ -18,6 +18,7 @@ import {
 import { getLanguageColor, getContrastColor } from '@/lib/languageColors';
 import SnippetMenu from '@/components/dashboard/SnippetMenu';
 import Toast from '@/components/ui/Toast';
+import ConditionalAd from '@/components/ConditionalAd';
 import styles from './page.module.css';
 
 interface Snippet {
@@ -264,6 +265,9 @@ export default function DashboardPage() {
           </motion.button>
         </motion.div>
 
+        {/* Ad for Free Users - Top of Page */}
+        <ConditionalAd slot="dashboard-top" />
+
         {/* Analytics Section */}
         <div className={styles.analyticsSection}>
           {/* Stats Grid */}
@@ -316,6 +320,9 @@ export default function DashboardPage() {
             </motion.div>
           )}
         </div>
+
+        {/* Ad for Free Users - Mid Page */}
+        <ConditionalAd slot="dashboard-mid" />
 
         {/* Snippets Column */}
         <div className={styles.snippetsSection}>

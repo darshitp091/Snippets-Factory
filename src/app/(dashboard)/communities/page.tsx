@@ -23,6 +23,7 @@ import {
   Lock,
   UserPlus,
 } from 'lucide-react';
+import ConditionalAd from '@/components/ConditionalAd';
 import styles from './page.module.css';
 
 interface Community {
@@ -304,6 +305,9 @@ export default function CommunitiesPage() {
         </div>
       </div>
 
+      {/* Ad for Free Users - Top */}
+      <ConditionalAd slot="communities-top" />
+
       {/* Filters */}
       <div className={styles.filters}>
         {/* Search */}
@@ -363,6 +367,9 @@ export default function CommunitiesPage() {
           ))}
         </div>
       </div>
+
+      {/* Ad for Free Users - Before Communities */}
+      <ConditionalAd slot="communities-mid" />
 
       {/* Loading State */}
       {loading ? (

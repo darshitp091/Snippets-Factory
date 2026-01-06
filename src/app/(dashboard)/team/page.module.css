@@ -42,9 +42,19 @@
   box-shadow: 0 4px 12px rgba(88, 129, 87, 0.3);
 }
 
-.inviteButton:hover {
+.inviteButton:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(88, 129, 87, 0.4);
+}
+
+.inviteButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lockIcon {
+  margin-left: 4px;
+  font-size: 0.9rem;
 }
 
 .statsGrid {
@@ -86,6 +96,65 @@
   font-weight: 700;
   color: #2c3e2b;
   margin: 0;
+}
+
+.statWarning {
+  margin: 4px 0 0 0;
+  font-size: 0.75rem;
+  color: #EF4444;
+  font-weight: 600;
+}
+
+/* Limit Warning Banner */
+.limitWarning {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.limitWarningIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.limitWarningContent {
+  flex: 1;
+}
+
+.limitWarningContent h3 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e2b;
+}
+
+.limitWarningContent p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.limitWarningButton {
+  padding: 10px 20px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #EF4444;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.limitWarningButton:hover {
+  background: rgba(239, 68, 68, 0.3);
+  transform: translateY(-1px);
 }
 
 .card {

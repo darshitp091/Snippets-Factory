@@ -32,28 +32,28 @@ export default function HomePage() {
     },
     {
       icon: <Zap size={28} />,
-      title: 'Instant Search',
-      description: 'Find any snippet in milliseconds with fuzzy search and intelligent filters.'
+      title: 'AI Code Generation',
+      description: 'Generate code snippets with AI assistance. Pro: 100/mo, Enterprise: unlimited.'
     },
     {
       icon: <Users size={28} />,
       title: 'Team Collaboration',
-      description: 'Share across teams with role-based access and real-time synchronization.'
+      description: 'Share across teams with role-based access and real-time synchronization. Pro: 5 members, Enterprise: unlimited.'
     },
     {
       icon: <Shield size={28} />,
-      title: 'Enterprise Security',
-      description: 'Bank-level encryption, SOC 2 compliance, and comprehensive audit logging.'
+      title: 'Coins & Awards',
+      description: 'Reddit-style virtual currency to recognize great code. Give Silver, Gold, or Platinum awards!'
     },
     {
       icon: <Search size={28} />,
       title: 'Usage Analytics',
-      description: 'Discover patterns and identify your most valuable code snippets.'
+      description: 'Track snippet usage and discover valuable insights. Available on Pro and Enterprise plans.'
     },
     {
       icon: <Lock size={28} />,
-      title: 'Version Control',
-      description: 'Automatic versioning with complete change history and diff viewing.'
+      title: 'Public API Access',
+      description: 'RESTful API with authentication and rate limiting. Pro: 1,000 calls/mo, Enterprise: unlimited.'
     }
   ];
 

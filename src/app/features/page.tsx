@@ -109,18 +109,33 @@ export default function FeaturesPage() {
     },
     {
       icon: <Workflow size={28} />,
-      title: 'API Access',
-      description: 'RESTful API for custom integrations and automations'
+      title: 'Public API',
+      description: 'RESTful API with rate limiting for custom integrations (Pro+)'
+    },
+    {
+      icon: <Zap size={28} />,
+      title: 'AI Code Generation',
+      description: 'Generate code snippets with AI assistance (Pro: 100/mo, Enterprise: unlimited)'
     },
     {
       icon: <BarChart3 size={28} />,
       title: 'Usage Analytics',
-      description: 'Track snippet usage and discover valuable insights'
+      description: 'Track snippet usage and discover valuable insights (Pro+)'
+    },
+    {
+      icon: <Code2 size={28} />,
+      title: 'Coins & Awards',
+      description: 'Reddit-style awards to recognize great code (Silver, Gold, Platinum)'
     },
     {
       icon: <Bell size={28} />,
-      title: 'Smart Notifications',
-      description: 'Real-time updates, alerts, and team activity notifications'
+      title: 'Ad-Free Experience',
+      description: 'Enjoy distraction-free coding (Basic, Pro, Enterprise)'
+    },
+    {
+      icon: <Shield size={28} />,
+      title: 'Subscription Automation',
+      description: 'Automatic expiry management and billing with Razorpay integration'
     }
   ];
 
