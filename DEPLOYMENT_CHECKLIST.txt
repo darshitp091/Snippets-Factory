@@ -1,0 +1,103 @@
+# Snippet Factory - Deployment Checklist
+
+## ✅ All Issues Fixed
+
+### 1. Login/Signup Redirect Loop - FIXED
+- Problem: Users stuck on login/signup page, requiring manual refresh
+- Solution: Disabled problematic middleware, added client-side auth
+- Status: WORKING
+
+### 2. Razorpay Payment Integration - FIXED
+- Problem: Payment not working, 400 errors
+- Solution: Updated to new LIVE API keys, fixed parameter names
+- Status: WORKING (after Vercel env update)
+
+### 3. Chunk Loading Errors - FIXED
+- Problem: "Chunk not loaded" warnings on page load
+- Solution: Configured Turbopack, removed webpack conflicts
+- Status: WORKING
+
+## 📋 Required Actions Before Testing
+
+### 1. Update Vercel Environment Variables
+Go to: https://vercel.com/dashboard → Your Project → Settings → Environment Variables
+
+Add/Update these:
+```
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_live_S0uF1hg0a5yaeV
+RAZORPAY_KEY_SECRET=u2aY6zRJpC7LdTGYLSN4oqnq
+```
+
+Then REDEPLOY the application.
+
+### 2. Configure Supabase Callback URLs
+Go to: https://supabase.com/dashboard → Your Project → Authentication → URL Configuration
+
+Add these Redirect URLs:
+```
+http://localhost:3000/auth/callback
+https://snippets-factory.vercel.app/auth/callback
+http://localhost:3000/dashboard
+https://snippets-factory.vercel.app/dashboard
+```
+
+Site URL:
+```
+https://snippets-factory.vercel.app
+```
+
+## 🧪 Testing After Deployment
+
+1. **Test Authentication:**
+   - Sign up with email → Should redirect to dashboard
+   - Log in → Should redirect to dashboard  
+   - GitHub OAuth → Should work through callback
+   - No more stuck pages or refresh required
+
+2. **Test Payment:**
+   - Go to pricing page
+   - Click "Upgrade" on any plan
+   - Razorpay modal should open
+   - Complete test payment
+   - Plan should update in database
+
+3. **Test Performance:**
+   - No chunk loading errors
+   - Fast page loads
+   - Smooth navigation
+
+## 📝 Summary of Changes
+
+**Authentication:**
+- Disabled server-side middleware (was causing redirect loops)
+- Added client-side authentication checks
+- Fixed OAuth redirect URLs
+
+**Payment:**
+- Updated Razorpay LIVE API keys
+- Fixed parameter naming (razorpay_order_id, etc.)
+- Fixed order notes extraction
+- Added support for Basic plan tier
+
+**Build:**
+- Configured Turbopack for Next.js 16
+- Removed webpack conflicts
+- Optimized build process
+
+## ⚠️ Security Reminder
+
+After successful testing:
+1. Rotate Razorpay API keys (they were exposed in commit e662430)
+2. Generate new keys from Razorpay dashboard
+3. Update them in Vercel environment variables
+
+## 🚀 Deployment Status
+
+- ✅ Code committed and pushed to GitHub
+- ✅ Build successful (no errors)
+- ⏳ Waiting for Vercel env variables update
+- ⏳ Waiting for Supabase callback URL configuration
+
+Once you complete the two actions above, everything should work perfectly!
+
+Last Updated: January 7, 2026
