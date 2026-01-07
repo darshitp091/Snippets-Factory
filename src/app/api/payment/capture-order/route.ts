@@ -4,9 +4,9 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
-    const { orderId, paymentId, signature } = await request.json();
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = await request.json();
 
-    if (!orderId || !paymentId || !signature) {
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify payment signature
-    const isValid = verifyRazorpaySignature(orderId, paymentId, signature);
+    const isValid = verifyRazorpaySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature);
 
     if (!isValid) {
       return NextResponse.json(
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get order details
-    const order = await getRazorpayOrder(orderId);
+    const order = await getRazorpayOrder(razorpay_order_id);
 
     if (!order || !order.notes) {
       return NextResponse.json(
@@ -33,7 +33,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { userId, plan, billing } = order.notes;
+    // Extract user_id and plan_type from notes (matching our create-order format)
+    const userId = order.notes.user_id;
+    const plan = order.notes.plan_type;
+    const billing = order.notes.duration_type;
 
     if (!userId || !plan) {
       return NextResponse.json(
@@ -46,7 +49,7 @@ export async function POST(request: NextRequest) {
     const { error: updateError } = await supabase
       .from('users')
       .update({
-        plan: plan as 'pro' | 'enterprise',
+        plan: plan as 'basic' | 'pro' | 'enterprise',
         max_snippets: -1, // Unlimited
       })
       .eq('id', userId);
@@ -65,22 +68,22 @@ export async function POST(request: NextRequest) {
       user_id: userId,
       action: 'payment_completed',
       resource_type: 'payment',
-      resource_id: orderId,
+      resource_id: razorpay_order_id,
       metadata: {
         plan,
         billing,
         status: 'completed',
         amount: order.amount / 100, // Convert paise to rupees
-        razorpay_order_id: orderId,
-        razorpay_payment_id: paymentId,
+        razorpay_order_id,
+        razorpay_payment_id,
       },
     });
 
     return NextResponse.json({
       success: true,
       plan,
-      orderId,
-      paymentId,
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
     });
   } catch (error) {
     console.error('Error verifying Razorpay payment:', error);

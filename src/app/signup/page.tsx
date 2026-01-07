@@ -67,7 +67,8 @@ export default function SignupPage() {
         options: {
           data: {
             full_name: formData.fullName
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`
         }
       });
 
@@ -78,8 +79,15 @@ export default function SignupPage() {
       }
 
       if (data.user) {
-        setEmailSent(true);
-        setLoading(false);
+        // Check if email confirmation is required
+        if (data.session) {
+          // Auto-confirmed, redirect to dashboard
+          window.location.href = '/dashboard';
+        } else {
+          // Email confirmation required
+          setEmailSent(true);
+          setLoading(false);
+        }
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -92,7 +100,7 @@ export default function SignupPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`
+          redirectTo: `${window.location.origin}/auth/callback`
         }
       });
 

@@ -58,15 +58,8 @@ export default function LoginPage() {
       }
 
       if (data.session) {
-        // Store session in cookies
-        document.cookie = `sb-access-token=${data.session.access_token}; path=/; max-age=3600; SameSite=Lax`;
-        document.cookie = `sb-refresh-token=${data.session.refresh_token}; path=/; max-age=3600; SameSite=Lax`;
-
-        // Small delay to ensure cookies are set
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        // Redirect to dashboard after successful login
-        router.push('/dashboard');
+        // Redirect to dashboard with full page reload to ensure session is recognized
+        window.location.href = '/dashboard';
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -79,7 +72,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`
+          redirectTo: `${window.location.origin}/auth/callback`
         }
       });
 
