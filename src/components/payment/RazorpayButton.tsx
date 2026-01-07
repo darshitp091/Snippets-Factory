@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import styles from './RazorpayCheckout.module.css';
 
 declare global {
   interface Window {
@@ -11,30 +10,30 @@ declare global {
   }
 }
 
-interface RazorpayCheckoutProps {
+interface RazorpayButtonProps {
   plan: 'basic' | 'pro' | 'enterprise';
   billing: 'monthly' | 'yearly';
-  amount: number; // Amount in paise
   onSuccess?: () => void;
   onError?: (error: string) => void;
+  children?: React.ReactNode;
   className?: string;
 }
 
-export default function RazorpayCheckout({
+export default function RazorpayButton({
   plan,
   billing,
-  amount,
   onSuccess,
   onError,
-  className,
-}: RazorpayCheckoutProps) {
+  children,
+  className = '',
+}: RazorpayButtonProps) {
   const [loading, setLoading] = useState(false);
-  const [userLoading, setUserLoading] = useState(true);
-  const [userId, setUserId] = useState<string | null>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
+  // Load Razorpay script
   useEffect(() => {
-    // Load Razorpay script
+    if (scriptLoaded) return;
+
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
@@ -50,79 +49,61 @@ export default function RazorpayCheckout({
         document.body.removeChild(script);
       }
     };
-  }, []);
+  }, [scriptLoaded, onError]);
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const fetchUser = async () => {
-    setUserLoading(true);
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUserId(session.user.id);
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-    } finally {
-      setUserLoading(false);
-    }
-  };
-
-  const handleCheckout = async () => {
-    if (!userId) {
-      onError?.('Please log in to upgrade');
-      return;
-    }
-
+  const handlePayment = async () => {
     if (!scriptLoaded) {
-      onError?.('Payment gateway is still loading. Please try again.');
+      onError?.('Payment gateway is still loading');
       return;
     }
 
     setLoading(true);
 
     try {
-      // Get the session token
+      // Get session token
       const { data: { session } } = await supabase.auth.getSession();
+
       if (!session?.access_token) {
-        throw new Error('Not authenticated. Please log in again.');
+        throw new Error('Please log in to continue');
       }
 
-      // Create Razorpay order
-      const response = await fetch('/api/payment/create-order', {
+      // Create order
+      const orderResponse = await fetch('/api/razorpay/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({
-          plan,
-          billing,
-        }),
+        body: JSON.stringify({ plan, billing }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to create payment');
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.error || 'Failed to create order');
       }
 
-      // Initialize Razorpay
+      const orderData = await orderResponse.json();
+
+      if (!orderData.success) {
+        throw new Error(orderData.error || 'Failed to create order');
+      }
+
+      // Initialize Razorpay checkout
       const options = {
-        key: data.keyId,
-        amount: data.amount,
-        currency: data.currency,
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency,
         name: 'Snippet Factory',
         description: `${plan.charAt(0).toUpperCase() + plan.slice(1)} Plan - ${billing === 'monthly' ? 'Monthly' : 'Yearly'}`,
-        order_id: data.orderId,
+        order_id: orderData.orderId,
         handler: async function (response: any) {
           try {
-            // Verify payment on backend
-            const verifyResponse = await fetch('/api/payment/capture-order', {
+            // Verify payment
+            const verifyResponse = await fetch('/api/razorpay/verify-payment', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+              },
               body: JSON.stringify({
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -136,26 +117,26 @@ export default function RazorpayCheckout({
               throw new Error(verifyData.error || 'Payment verification failed');
             }
 
-            // Success - redirect to success page
-            window.location.href = '/payment/success';
+            // Success
             onSuccess?.();
+            window.location.href = '/payment/success';
           } catch (error: any) {
             console.error('Payment verification error:', error);
             onError?.(error.message || 'Payment verification failed');
-            setLoading(false);
+            window.location.href = '/payment/cancel';
           }
+        },
+        prefill: {
+          email: session.user.email || '',
+          contact: '',
+        },
+        theme: {
+          color: '#6366f1',
         },
         modal: {
           ondismiss: function () {
             setLoading(false);
           },
-        },
-        prefill: {
-          email: '',
-          contact: '',
-        },
-        theme: {
-          color: '#6366f1',
         },
       };
 
@@ -167,43 +148,36 @@ export default function RazorpayCheckout({
         onError?.(response.error.description || 'Payment failed');
         setLoading(false);
       });
+
     } catch (error: any) {
-      console.error('Checkout error:', error);
-      onError?.(error.message || 'Failed to start checkout');
+      console.error('Payment error:', error);
+      onError?.(error.message || 'Payment failed');
       setLoading(false);
     }
   };
 
   return (
     <button
-      onClick={handleCheckout}
-      disabled={loading || userLoading || !userId || !scriptLoaded}
-      className={`${styles.button} ${className || ''}`}
+      onClick={handlePayment}
+      disabled={loading || !scriptLoaded}
+      className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+        loading || !scriptLoaded
+          ? 'opacity-50 cursor-not-allowed'
+          : 'hover:opacity-90'
+      } ${className}`}
     >
-      {userLoading ? (
+      {loading ? (
         <>
-          <Loader2 size={18} className={styles.spinner} />
-          <span>Loading...</span>
-        </>
-      ) : loading ? (
-        <>
-          <Loader2 size={18} className={styles.spinner} />
+          <Loader2 className="w-5 h-5 animate-spin" />
           <span>Processing...</span>
         </>
       ) : !scriptLoaded ? (
         <>
-          <Loader2 size={18} className={styles.spinner} />
-          <span>Loading Payment...</span>
+          <Loader2 className="w-5 h-5 animate-spin" />
+          <span>Loading...</span>
         </>
       ) : (
-        <>
-          <img
-            src="https://razorpay.com/assets/razorpay-glyph.svg"
-            alt="Razorpay"
-            className={styles.logo}
-          />
-          <span>Checkout with Razorpay</span>
-        </>
+        children || <span>Pay Now</span>
       )}
     </button>
   );

@@ -22,8 +22,6 @@ const nextConfig = {
       bodySizeLimit: '2mb',
     },
   },
-  // Turbopack configuration (Next.js 16+)
-  turbopack: {},
   // Reduce bundle size
   compress: true,
 }

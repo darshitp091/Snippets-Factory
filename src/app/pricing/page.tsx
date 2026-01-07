@@ -51,8 +51,8 @@ export default function PricingPage() {
         return;
       }
 
-      // Create Razorpay order
-      const response = await fetch('/api/payment/create-order', {
+      // Create Razorpay order using new API endpoint
+      const response = await fetch('/api/razorpay/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,11 +64,13 @@ export default function PricingPage() {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to create order');
+      const responseData = await response.json();
+
+      if (!response.ok || !responseData.success) {
+        throw new Error(responseData.error || 'Failed to create order');
       }
 
-      const { orderId, amount, currency } = await response.json();
+      const { orderId, amount, currency, keyId } = responseData;
 
       // Load Razorpay script
       const script = document.createElement('script');
@@ -78,15 +80,15 @@ export default function PricingPage() {
 
       script.onload = () => {
         const options = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          key: keyId,
           amount,
           currency,
           name: 'Snippet Factory',
           description: `${planName} Plan - ${billingPeriod === 'monthly' ? 'Monthly' : 'Annual'} Subscription`,
           order_id: orderId,
           handler: async function (response: any) {
-            // Verify payment
-            const verifyResponse = await fetch('/api/payment/capture-order', {
+            // Verify payment using new API endpoint
+            const verifyResponse = await fetch('/api/razorpay/verify-payment', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -96,7 +98,9 @@ export default function PricingPage() {
               }),
             });
 
-            if (verifyResponse.ok) {
+            const verifyData = await verifyResponse.json();
+
+            if (verifyResponse.ok && verifyData.success) {
               window.location.href = '/payment/success';
             } else {
               window.location.href = '/payment/cancel';

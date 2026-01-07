@@ -1,9 +1,12 @@
-export type PlanType = 'free' | 'pro' | 'enterprise';
+export type PlanType = 'free' | 'basic' | 'pro' | 'enterprise';
 
 export interface PlanFeatures {
   name: string;
   maxSnippets: number;
   maxTeamMembers: number;
+  maxCollections: number;
+  aiGenerations: number;
+  apiCalls: number;
   analytics: boolean;
   apiAccess: boolean;
   cloudSync: boolean;
@@ -19,8 +22,11 @@ export interface PlanFeatures {
 export const PLAN_FEATURES: Record<PlanType, PlanFeatures> = {
   free: {
     name: 'Free',
-    maxSnippets: 50,
+    maxSnippets: 10,
     maxTeamMembers: 1,
+    maxCollections: 1,
+    aiGenerations: 0,
+    apiCalls: 0,
     analytics: false,
     apiAccess: false,
     cloudSync: true,
@@ -32,10 +38,31 @@ export const PLAN_FEATURES: Record<PlanType, PlanFeatures> = {
     sso: false,
     customBranding: false,
   },
+  basic: {
+    name: 'Basic',
+    maxSnippets: 100,
+    maxTeamMembers: 1,
+    maxCollections: 10,
+    aiGenerations: 50,
+    apiCalls: 500,
+    analytics: false,
+    apiAccess: false,
+    cloudSync: true,
+    aiCategorization: true,
+    advancedSearch: true,
+    customCategories: true,
+    prioritySupport: false,
+    auditLogs: false,
+    sso: false,
+    customBranding: false,
+  },
   pro: {
     name: 'Pro',
     maxSnippets: -1, // unlimited
-    maxTeamMembers: 10,
+    maxTeamMembers: 5,
+    maxCollections: -1,
+    aiGenerations: 100,
+    apiCalls: 1000,
     analytics: true,
     apiAccess: true,
     cloudSync: true,
@@ -51,6 +78,9 @@ export const PLAN_FEATURES: Record<PlanType, PlanFeatures> = {
     name: 'Enterprise',
     maxSnippets: -1, // unlimited
     maxTeamMembers: -1, // unlimited
+    maxCollections: -1,
+    aiGenerations: -1,
+    apiCalls: -1,
     analytics: true,
     apiAccess: true,
     cloudSync: true,

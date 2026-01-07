@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
+import ThemeProvider from '@/components/providers/ThemeProvider';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -21,19 +23,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark" data-scroll-behavior="smooth">
-      <head>
-        {/* Google AdSense Script */}
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+        {/* Google AdSense Script - Loaded after hydration */}
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
-          <script
+          <Script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
             crossOrigin="anonymous"
+            strategy="afterInteractive"
           />
         )}
-      </head>
-      <body className={inter.className}>
-        {children}
       </body>
     </html>
   );
