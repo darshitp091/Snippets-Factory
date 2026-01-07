@@ -1,0 +1,127 @@
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #EFEFEF;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trigger:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.selectedCurrency {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.currencySymbol {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.currencyCode {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #1A1A1A;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: 8px;
+  min-width: 240px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #EFEFEF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.option:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.option.selected {
+  background: rgba(88, 129, 87, 0.15);
+  border: 1px solid rgba(88, 129, 87, 0.3);
+}
+
+.optionContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.optionSymbol {
+  font-size: 1.3rem;
+  font-weight: 700;
+  width: 32px;
+  text-align: center;
+}
+
+.optionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.optionCode {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #EFEFEF;
+}
+
+.optionName {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.checkIcon {
+  color: #588157;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .dropdown {
+    right: auto;
+    left: 0;
+    min-width: 220px;
+  }
+}
