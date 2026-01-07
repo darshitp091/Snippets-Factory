@@ -128,6 +128,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Log payment in audit logs
+    const orderAmount = typeof order.amount === 'number' ? order.amount : 0;
     await supabase.from('audit_logs').insert({
       team_id: userId,
       user_id: userId,
@@ -137,7 +138,7 @@ export async function POST(req: NextRequest) {
       metadata: {
         plan,
         billing,
-        amount: order.amount / 100, // Convert to rupees
+        amount: orderAmount / 100, // Convert to rupees
         payment_id: razorpay_payment_id,
         order_id: razorpay_order_id,
       },
