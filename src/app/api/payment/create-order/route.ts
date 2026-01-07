@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!['pro', 'enterprise'].includes(plan)) {
+    if (!['basic', 'pro', 'enterprise'].includes(plan)) {
       return NextResponse.json(
         { error: 'Invalid plan' },
         { status: 400 }
@@ -51,12 +51,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Get plan price (in paise)
-    const amount = getPlanPrice(plan as 'pro' | 'enterprise', billing as 'monthly' | 'yearly');
+    const amount = getPlanPrice(plan as 'basic' | 'pro' | 'enterprise', billing as 'monthly' | 'yearly');
 
     // Create Razorpay order
     const order = await createRazorpayOrder(
       amount,
-      plan as 'pro' | 'enterprise',
+      plan as 'basic' | 'pro' | 'enterprise',
       billing as 'monthly' | 'yearly',
       userId
     );

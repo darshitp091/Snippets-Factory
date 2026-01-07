@@ -18,12 +18,13 @@ export const SUPPORTED_CURRENCIES: Currency[] = [
   { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', rate: 3.67 },
 ];
 
-// Affordable pricing structure in INR (base currency)
+// Competitive pricing structure in INR (base currency)
+// Pricing based on market research with 40-50% profit margin
 export const PRICING_INR = {
   free: { monthly: 0, annual: 0 },
-  basic: { monthly: 99, annual: 999 }, // ~$1.10/mo
-  pro: { monthly: 299, annual: 2999 }, // ~$3.30/mo
-  enterprise: { monthly: 1999, annual: 19999 }, // ~$22/mo
+  basic: { monthly: 599, annual: 5999 }, // ~$6.63/mo - competitive with GitHub Teams
+  pro: { monthly: 1799, annual: 17999 }, // ~$19.92/mo - premium team features
+  enterprise: { monthly: 7999, annual: 79999 }, // ~$88.56/mo - full enterprise support
 };
 
 /**

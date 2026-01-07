@@ -40,25 +40,32 @@ interface RazorpayPaymentVerification {
 }
 
 /**
- * Plan pricing configuration
+ * Plan pricing configuration (competitive market pricing)
+ * Amounts in paise (1 INR = 100 paise)
+ * Pricing based on market research with 40-50% profit margin
  */
 export const PLAN_PRICES = {
+  basic: {
+    monthly: 59900, // ₹599/mo (~$6.63/mo) - competitive with GitHub Teams
+    yearly: 599900, // ₹5,999/year (~$66.43/year, save 17%)
+    yearlyMonthly: 49992, // Effective monthly price for yearly (₹5999/12)
+  },
   pro: {
-    monthly: 2999, // Amount in paise (₹29.99)
-    yearly: 29999, // Amount in paise (₹299.99)
-    yearlyMonthly: 2499, // Effective monthly price for yearly
+    monthly: 179900, // ₹1,799/mo (~$19.92/mo) - premium team features
+    yearly: 1799900, // ₹17,999/year (~$199.32/year, save 17%)
+    yearlyMonthly: 149992, // Effective monthly price for yearly (₹17999/12)
   },
   enterprise: {
-    monthly: 9999, // Amount in paise (₹99.99)
-    yearly: 99999, // Amount in paise (₹999.99)
-    yearlyMonthly: 8333,
+    monthly: 799900, // ₹7,999/mo (~$88.56/mo) - full enterprise support
+    yearly: 7999900, // ₹79,999/year (~$885.60/year, save 17%)
+    yearlyMonthly: 666658, // Effective monthly price for yearly (₹79999/12)
   },
 };
 
 /**
  * Get plan price based on billing cycle (in paise)
  */
-export function getPlanPrice(plan: 'pro' | 'enterprise', billing: 'monthly' | 'yearly'): number {
+export function getPlanPrice(plan: 'basic' | 'pro' | 'enterprise', billing: 'monthly' | 'yearly'): number {
   return billing === 'monthly'
     ? PLAN_PRICES[plan].monthly
     : PLAN_PRICES[plan].yearly;
@@ -69,7 +76,7 @@ export function getPlanPrice(plan: 'pro' | 'enterprise', billing: 'monthly' | 'y
  */
 export async function createRazorpayOrder(
   amount: number, // Amount in paise
-  plan: 'pro' | 'enterprise',
+  plan: 'basic' | 'pro' | 'enterprise',
   billing: 'monthly' | 'yearly',
   userId: string
 ): Promise<RazorpayOrder> {
