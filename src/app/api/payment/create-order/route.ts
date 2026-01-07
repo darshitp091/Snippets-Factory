@@ -3,8 +3,12 @@ import { createRazorpayOrder, getPlanPrice } from '@/lib/razorpay';
 import { supabase } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
+  console.log('[CREATE-ORDER] API endpoint called');
+
   try {
-    const { plan, billing } = await request.json();
+    const body = await request.json();
+    const { plan, billing } = body;
+    console.log('[CREATE-ORDER] Request data:', { plan, billing });
 
     // Get authorization header
     const authHeader = request.headers.get('authorization');
@@ -108,10 +112,21 @@ export async function POST(request: NextRequest) {
       keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
     });
   } catch (error) {
-    console.error('Error creating Razorpay order:', error);
+    console.error('[CREATE-ORDER] Error creating Razorpay order:', error);
     return NextResponse.json(
-      { error: 'Failed to create payment order' },
+      {
+        error: 'Failed to create payment order',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
+}
+
+// Add GET handler to test if route exists
+export async function GET() {
+  return NextResponse.json({
+    message: 'Payment create-order endpoint is working',
+    timestamp: new Date().toISOString()
+  });
 }
