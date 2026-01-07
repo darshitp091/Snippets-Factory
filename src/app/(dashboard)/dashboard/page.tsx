@@ -44,8 +44,17 @@ export default function DashboardPage() {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' as 'success' | 'error' | 'info' });
 
   useEffect(() => {
-    loadSnippets();
+    checkAuthAndLoadSnippets();
   }, []);
+
+  const checkAuthAndLoadSnippets = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+    loadSnippets();
+  };
 
   const loadSnippets = async () => {
     try {
