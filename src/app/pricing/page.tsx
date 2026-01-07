@@ -42,15 +42,25 @@ export default function PricingPage() {
     setProcessingPlan(planName);
 
     try {
+      // Get user session and token
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session?.access_token) {
+        alert('Please log in to continue');
+        window.location.href = '/login';
+        return;
+      }
+
       // Create Razorpay order
       const response = await fetch('/api/payment/create-order', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
         body: JSON.stringify({
           plan: planName.toLowerCase(),
-          billing: billingPeriod,
-          amount: getRazorpayAmount(planPrice, selectedCurrency),
-          currency: selectedCurrency,
+          billing: billingPeriod === 'monthly' ? 'monthly' : 'yearly',
         }),
       });
 
