@@ -104,7 +104,7 @@ export default function HomePage() {
 
               <motion.div variants={fadeInUp} className={styles.heroButtons}>
                 <Link href="/signup" className={styles.primaryBtn}>
-                  Start Free Trial
+                  Get Started
                   <ArrowRight size={20} />
                 </Link>
                 <Link href="/demo" className={styles.secondaryBtn}>
@@ -276,8 +276,6 @@ export default function HomePage() {
               </Link>
             </div>
             <div className={styles.ctaFooter}>
-              <span className={styles.ctaBadge}>No credit card required</span>
-              <span className={styles.ctaBadge}>14-day free trial</span>
               <span className={styles.ctaBadge}>Cancel anytime</span>
             </div>
           </motion.div>

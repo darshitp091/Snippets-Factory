@@ -109,7 +109,7 @@ export default function UpgradePrompt({ feature, recommendedPlan, onClose }: Upg
         </div>
 
         <p className={styles.guarantee}>
-          14-day money-back guarantee • Cancel anytime
+          Cancel anytime
         </p>
       </motion.div>
     </>

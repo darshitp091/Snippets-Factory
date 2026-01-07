@@ -281,7 +281,7 @@ export default function PricingPage() {
               variants={fadeInUp}
               style={{ fontSize: '1.25rem', color: '#666', maxWidth: '700px', margin: '0 auto 40px' }}
             >
-              Choose the perfect plan for your team. All plans include a 14-day free trial.
+              Choose the perfect plan for your team.
             </motion.p>
 
             {/* Currency Selector and Billing Toggle */}

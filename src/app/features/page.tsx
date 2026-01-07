@@ -241,7 +241,7 @@ export default function FeaturesPage() {
                   boxShadow: '0 4px 20px rgba(88, 129, 87, 0.3)'
                 }}
               >
-                Start Free Trial
+                Get Started
                 <ArrowRight size={20} />
               </Link>
             </motion.div>
